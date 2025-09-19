@@ -1,1 +1,75 @@
-<p>pessoas-crud works!</p>
+<div class="card m-4">
+  <p-toast></p-toast>
+  <p-confirmDialog></p-confirmDialog>
+
+  <p-toolbar styleClass="mb-4">
+    <ng-template pTemplate="left">
+      <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-success mr-2" (click)="abrirModalNovaPessoa()"></button>
+    </ng-template>
+  </p-toolbar>
+
+  <p-table #dt [value]="pessoas()" [rows]="10" [paginator]="true" responsiveLayout="scroll"
+           [globalFilterFields]="['nome','email','cpf']" [loading]="loading()">
+    <ng-template pTemplate="caption">
+      <div class="flex items-center justify-between">
+        <h5 class="m-0">Gerenciar Pessoas</h5>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="nome">Nome <p-sortIcon field="nome"></p-sortIcon></th>
+        <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
+        <th>CPF</th>
+        <th pSortableColumn="dataNascimento">Data de Nascimento <p-sortIcon field="dataNascimento"></p-sortIcon></th>
+        <th>Ações</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-pessoa>
+      <tr>
+        <td>{{ pessoa.nome }}</td>
+        <td>{{ pessoa.email }}</td>
+        <td>{{ pessoa.cpf | slice:0:3 }}.{{ pessoa.cpf | slice:3:6 }}.{{ pessoa.cpf | slice:6:9 }}-{{ pessoa.cpf | slice:9:11 }}</td>
+        <td>{{ pessoa.dataNascimento | date: 'dd/MM/yyyy' }}</td>
+        <td>
+          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editarPessoa(pessoa)"></button>
+          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deletarPessoa(pessoa)"></button>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog [(visible)]="pessoaDialog" [style]="{width: '450px'}" header="Detalhes da Pessoa" [modal]="true" styleClass="p-fluid">
+  <ng-template pTemplate="content">
+    <form #pessoaForm="ngForm">
+      <div class="field mb-3">
+        <label for="nome" class="font-bold">Nome</label>
+        <input type="text" pInputText id="nome" name="nome" [(ngModel)]="pessoa.nome" required autofocus maxlength="100" #nome="ngModel" />
+        <small class="p-error" *ngIf="nome.invalid && (nome.dirty || nome.touched)">O nome é obrigatório.</small>
+      </div>
+      <div class="field mb-3">
+        <label for="email" class="font-bold">Email</label>
+        <input type="email" pInputText id="email" name="email" [(ngModel)]="pessoa.email" required email #email="ngModel" />
+        <small class="p-error" *ngIf="email.invalid && (email.dirty || email.touched)">
+          <span *ngIf="email.errors?.['required']">O email é obrigatório.</span>
+          <span *ngIf="email.errors?.['email']">Formato de email inválido.</span>
+        </small>
+      </div>
+      <div class="field mb-3">
+        <label for="cpf" class="font-bold">CPF</label>
+        <p-inputMask mask="999.999.999-99" [(ngModel)]="pessoa.cpf" name="cpf" placeholder="999.999.999-99" required minlength="14" [unmask]="true" #cpf="ngModel"></p-inputMask>
+        <small class="p-error" *ngIf="cpf.invalid && (cpf.dirty || cpf.touched)">O CPF é obrigatório e deve ser completo.</small>
+      </div>
+      <div class="field">
+        <label for="dataNascimento" class="font-bold">Data de Nascimento</label>
+        <p-calendar [(ngModel)]="pessoa.dataNascimento" name="dataNascimento" dateFormat="dd/mm/yy" [showIcon]="true" inputId="dataNascimento" required #dataNascimento="ngModel"></p-calendar>
+        <small class="p-error" *ngIf="dataNascimento.invalid && (dataNascimento.dirty || dataNascimento.touched)">A data de nascimento é obrigatória.</small>
+      </div>
+    </form>
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="esconderModal()"></button>
+    <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-text" (click)="salvarPessoa()" [disabled]="!pessoaForm.form.valid"></button>
+  </ng-template>
+</p-dialog>
