@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { PessoasCrudComponent } from './features/pessoas-crud/pessoas-crud';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, PessoasCrudComponent],
-  template: `<app-pessoas-crud></app-pessoas-crud>`,
+  imports: [RouterModule],
+  template: `<router-outlet></router-outlet>`,
 })
-export class AppComponent {}
+export class AppComponent {} // <-- export é obrigatório

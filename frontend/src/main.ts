@@ -1,13 +1,17 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideHttpClient } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'; // Importa o provedor de animações
 import { AppComponent } from './app/app';
+import { provideRouter } from '@angular/router';
+import { routes } from './app/app.routes';
+import { importProvidersFrom } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpClientModule } from '@angular/common/http'; // <-- IMPORTAR AQUI
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideHttpClient(),
-    provideRouter([]),
-    provideAnimationsAsync() // Adiciona o provedor de animações ao array
+    importProvidersFrom(
+      BrowserAnimationsModule,
+      HttpClientModule // <-- Adicionar HttpClientModule aqui
+    ),
+    provideRouter(routes),
   ]
-}).catch(err => console.error(err));
+});

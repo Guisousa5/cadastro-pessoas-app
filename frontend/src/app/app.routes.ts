@@ -1,20 +1,10 @@
+// app.routes.ts
 import { Routes } from '@angular/router';
+import { HomeComponent } from './features/home/home';
+import { PessoasCrudComponent } from './features/pessoas-crud/pessoas-crud'
 
 export const routes: Routes = [
-  {
-    path: 'pessoas',
-    // LAZY LOADING: O componente só é carregado quando esta rota é acessada.
-    loadComponent: () => import('./features/pessoas-crud/pessoas-crud')
-                          .then(m => m.PessoasCrudComponent),
-    title: 'Cadastro de Pessoas'
-  },
-  {
-    path: '', // Rota padrão (home)
-    redirectTo: 'pessoas', // Redireciona para a página de pessoas
-    pathMatch: 'full'
-  },
-  {
-    path: '**', // Rota coringa para qualquer outra URL
-    redirectTo: 'pessoas'
-  }
+  { path: '', component: HomeComponent }, // rota inicial -> Home
+  { path: 'pessoas', component: PessoasCrudComponent }, // CRUD
+  { path: '**', redirectTo: '' } // qualquer rota inválida volta para home
 ];
