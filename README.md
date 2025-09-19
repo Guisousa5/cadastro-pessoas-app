@@ -20,6 +20,15 @@ Uma API (Interface de Programação de Aplicações) permite que diferentes sist
 - Atualização de dados de pessoas
 - Remoção de pessoas
 
+## Banco de Dados
+
+O projeto utiliza **SQL Server LocalDB**, que já vem integrado ao .NET SDK.  
+Assim, não é necessário configurar um banco manualmente para rodar a aplicação em ambiente local.  
+
+- Por padrão, a string de conexão está configurada no arquivo `appsettings.json`.  
+- O Entity Framework Core cria e atualiza o banco automaticamente com base nas migrations.  
+- Caso queira usar uma instância própria do SQL Server, basta alterar a connection string em `appsettings.json`.  
+
 ## Como executar
 
 1. Clone o repositório
