@@ -27,6 +27,13 @@ export class PessoaService {
     return this.http.delete(`${this.apiUrl}/${id}`).pipe(catchError(this.handleError));
   }
 
+  // Novo método de validação de CPF
+  validarCpf(cpf: string): boolean {
+    if (!cpf) return false;
+    const numeros = cpf.replace(/\D/g, '');
+    return numeros.length === 11; // apenas verifica quantidade de dígitos
+  }
+
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'Ocorreu um erro desconhecido!';
     if (error.error instanceof ErrorEvent) {

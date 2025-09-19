@@ -1,75 +1,102 @@
-<div class="card m-4">
-  <p-toast></p-toast>
-  <p-confirmDialog></p-confirmDialog>
+<app-header></app-header>  <!-- Seu header do caminho informado -->
 
-  <p-toolbar styleClass="mb-4">
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="card">
+  <!-- Toolbar com sombra e cantos arredondados -->
+  <p-toolbar styleClass="p-mb-4 p-shadow-2 p-rounded">
     <ng-template pTemplate="left">
-      <button pButton pRipple label="Novo" icon="pi pi-plus" class="p-button-success mr-2" (click)="abrirModalNovaPessoa()"></button>
+      <button pButton label="Nova Pessoa" icon="pi pi-plus" class="p-button-success p-button-rounded p-mr-2" (click)="abrirModalNovaPessoa()"></button>
     </ng-template>
   </p-toolbar>
 
-  <p-table #dt [value]="pessoas()" [rows]="10" [paginator]="true" responsiveLayout="scroll"
-           [globalFilterFields]="['nome','email','cpf']" [loading]="loading()">
-    <ng-template pTemplate="caption">
-      <div class="flex items-center justify-between">
-        <h5 class="m-0">Gerenciar Pessoas</h5>
-      </div>
-    </ng-template>
+  <!-- Tabela estilizada -->
+  <p-table [value]="pessoas()" [loading]="loading()" responsiveLayout="scroll"
+           styleClass="p-datatable-gridlines p-datatable-striped p-datatable-hoverable"
+           [paginator]="true" [rows]="10" [showCurrentPageReport]="true"
+           currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+           [rowsPerPageOptions]="[10, 25, 50]">
+
+    <!-- Cabeçalho -->
     <ng-template pTemplate="header">
       <tr>
         <th pSortableColumn="nome">Nome <p-sortIcon field="nome"></p-sortIcon></th>
+        <th pSortableColumn="cpf">CPF <p-sortIcon field="cpf"></p-sortIcon></th>
         <th pSortableColumn="email">Email <p-sortIcon field="email"></p-sortIcon></th>
-        <th>CPF</th>
-        <th pSortableColumn="dataNascimento">Data de Nascimento <p-sortIcon field="dataNascimento"></p-sortIcon></th>
-        <th>Ações</th>
+        <th pSortableColumn="dataNascimento">Data Nascimento <p-sortIcon field="dataNascimento"></p-sortIcon></th>
+        <th style="width:180px" class="text-center">Ações</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-pessoa>
+
+    <!-- Corpo da tabela -->
+    <ng-template pTemplate="body" let-p>
       <tr>
-        <td>{{ pessoa.nome }}</td>
-        <td>{{ pessoa.email }}</td>
-        <td>{{ pessoa.cpf | slice:0:3 }}.{{ pessoa.cpf | slice:3:6 }}.{{ pessoa.cpf | slice:6:9 }}-{{ pessoa.cpf | slice:9:11 }}</td>
-        <td>{{ pessoa.dataNascimento | date: 'dd/MM/yyyy' }}</td>
-        <td>
-          <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editarPessoa(pessoa)"></button>
-          <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deletarPessoa(pessoa)"></button>
+        <td>{{ p.nome }}</td>
+        <td>{{ p.cpf }}</td>
+        <td>{{ p.email }}</td>
+        <td>{{ p.dataNascimento && p.dataNascimento !== '' ? (p.dataNascimento | date:'dd/MM/yyyy') : '-' }}</td>
+        <td class="flex gap-2 justify-content-center">
+          <!-- Botão Editar -->
+          <button pButton icon="pi pi-pencil" label="Editar" class="p-button-sm p-button-success p-button-rounded"
+                  pTooltip="Editar" tooltipPosition="top" (click)="editarPessoa(p)"></button>
+          <!-- Botão Deletar -->
+          <button pButton icon="pi pi-trash" label="Deletar" class="p-button-sm p-button-danger p-button-rounded"
+                  pTooltip="Deletar" tooltipPosition="top" (click)="deletarPessoa(p)"></button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <!-- Mensagem de tabela vazia -->
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5" class="text-center p-4">
+          <div class="flex flex-column align-items-center">
+            <i class="pi pi-users" style="font-size:3rem;color:var(--surface-500)"></i>
+            <p class="mt-3 mb-0">Nenhuma pessoa cadastrada.</p>
+          </div>
         </td>
       </tr>
     </ng-template>
   </p-table>
 </div>
 
-<p-dialog [(visible)]="pessoaDialog" [style]="{width: '450px'}" header="Detalhes da Pessoa" [modal]="true" styleClass="p-fluid">
-  <ng-template pTemplate="content">
-    <form #pessoaForm="ngForm">
-      <div class="field mb-3">
-        <label for="nome" class="font-bold">Nome</label>
-        <input type="text" pInputText id="nome" name="nome" [(ngModel)]="pessoa.nome" required autofocus maxlength="100" #nome="ngModel" />
-        <small class="p-error" *ngIf="nome.invalid && (nome.dirty || nome.touched)">O nome é obrigatório.</small>
-      </div>
-      <div class="field mb-3">
-        <label for="email" class="font-bold">Email</label>
-        <input type="email" pInputText id="email" name="email" [(ngModel)]="pessoa.email" required email #email="ngModel" />
-        <small class="p-error" *ngIf="email.invalid && (email.dirty || email.touched)">
-          <span *ngIf="email.errors?.['required']">O email é obrigatório.</span>
-          <span *ngIf="email.errors?.['email']">Formato de email inválido.</span>
-        </small>
-      </div>
-      <div class="field mb-3">
-        <label for="cpf" class="font-bold">CPF</label>
-        <p-inputMask mask="999.999.999-99" [(ngModel)]="pessoa.cpf" name="cpf" placeholder="999.999.999-99" required minlength="14" [unmask]="true" #cpf="ngModel"></p-inputMask>
-        <small class="p-error" *ngIf="cpf.invalid && (cpf.dirty || cpf.touched)">O CPF é obrigatório e deve ser completo.</small>
-      </div>
-      <div class="field">
-        <label for="dataNascimento" class="font-bold">Data de Nascimento</label>
-        <p-calendar [(ngModel)]="pessoa.dataNascimento" name="dataNascimento" dateFormat="dd/mm/yy" [showIcon]="true" inputId="dataNascimento" required #dataNascimento="ngModel"></p-calendar>
-        <small class="p-error" *ngIf="dataNascimento.invalid && (dataNascimento.dirty || dataNascimento.touched)">A data de nascimento é obrigatória.</small>
-      </div>
-    </form>
-  </ng-template>
+<!-- Modal de cadastro/edição -->
+<p-dialog header="Pessoa" [(visible)]="pessoaDialogValue" [modal]="true" [closable]="true"
+          [style]="{width:'500px'}" [draggable]="false" [resizable]="false"
+          styleClass="p-fluid p-shadow-6 p-dialog-rounded">
+  <div class="formgrid grid">
+    <div class="field col-12">
+      <label for="nome">Nome *</label>
+      <input id="nome" type="text" pInputText [(ngModel)]="nomeValue" placeholder="Digite o nome completo" class="w-full p-inputtext-lg">
+      <small class="p-error" *ngIf="!nomeValue">Nome é obrigatório.</small>
+    </div>
+
+    <div class="field col-12 md:col-6">
+      <label for="cpf">CPF *</label>
+      <p-inputMask id="cpf" mask="999.999.999-99" [(ngModel)]="cpfValue" placeholder="000.000.000-00" class="w-full p-inputtext-lg"></p-inputMask>
+      <small class="p-error" *ngIf="cpfValue && !validarCpf(cpfValue)">CPF inválido.</small>
+    </div>
+
+    <div class="field col-12 md:col-6">
+      <label for="dataNascimento">Data de Nascimento</label>
+      <input id="dataNascimento" type="date" [(ngModel)]="dataNascimento" class="w-full p-inputtext-lg">
+    </div>
+
+    <div class="field col-12">
+      <label for="email">Email *</label>
+      <input id="email" type="email" pInputText [(ngModel)]="emailValue" placeholder="exemplo@email.com" class="w-full p-inputtext-lg">
+      <small class="p-error" *ngIf="!emailValue">Email é obrigatório.</small>
+    </div>
+  </div>
 
   <ng-template pTemplate="footer">
-    <button pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="esconderModal()"></button>
-    <button pButton pRipple label="Salvar" icon="pi pi-check" class="p-button-text" (click)="salvarPessoa()" [disabled]="!pessoaForm.form.valid"></button>
+    <div class="flex justify-content-end gap-2">
+      <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text p-button-secondary p-button-rounded" (click)="esconderModal()"></button>
+      <button pButton label="Salvar" icon="pi pi-check" class="p-button-success p-button-rounded" 
+              [disabled]="!nomeValue || !cpfValue || !emailValue" (click)="salvarPessoa()"></button>
+    </div>
   </ng-template>
 </p-dialog>
+
+<app-footer></app-footer>  <!-- Seu footer do caminho informado -->

@@ -7,14 +7,14 @@ import { RouterLink } from '@angular/router';
   selector: 'app-menu',
   standalone: true,
   imports: [MenubarModule, RouterLink],
-  templateUrl: './menu.component.html',
+  templateUrl: './menu.html',
+  styleUrls: ['./menu.scss']
 })
 export class MenuComponent {
+  // Declarando items que será usado no p-menubar
   items: MenuItem[] = [
-    {
-      label: 'Pessoas',
-      icon: 'pi pi-fw pi-users',
-      routerLink: '/pessoas'
-    }
+    { label: 'Home', routerLink: '/' },
+    { label: 'Pessoas', routerLink: '/pessoas' },
+    { label: 'Configurações', routerLink: '/config' },
   ];
 }

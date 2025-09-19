@@ -1,0 +1,121 @@
+/* Tabela */
+p-table {
+  .p-datatable-header {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #333;
+  }
+
+  .p-datatable-tbody > tr {
+    transition: background-color 0.3s ease;
+    &:hover {
+      background-color: #f0f8ff !important;
+    }
+  }
+
+  .p-datatable-tbody > tr > td {
+    vertical-align: middle;
+    padding: 0.75rem 1rem;
+  }
+
+  .p-datatable-gridlines .p-datatable-tbody > tr > td {
+    border-bottom: 1px solid #e0e0e0;
+  }
+
+  .p-datatable-striped .p-datatable-tbody > tr:nth-child(even) {
+    background-color: #fafafa;
+  }
+
+  .p-paginator {
+    font-size: 0.9rem;
+    .p-paginator-current {
+      font-weight: bold;
+    }
+  }
+}
+
+/* Toolbar */
+p-toolbar {
+  background-color: #f9f9f9;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+/* Botões de ação */
+button.p-button {
+  font-weight: 500;
+  transition: all 0.2s ease;
+
+  &.p-button-success {
+    background-color: #4caf50;
+    border-color: #4caf50;
+
+    &:hover {
+      background-color: #45a049;
+      border-color: #45a049;
+    }
+  }
+
+  &.p-button-danger {
+    background-color: #f44336;
+    border-color: #f44336;
+
+    &:hover {
+      background-color: #e53935;
+      border-color: #e53935;
+    }
+  }
+
+  &.p-button-rounded {
+    border-radius: 50px;
+  }
+
+  .p-button-icon.pi {
+    font-size: 1rem;
+  }
+
+  &.p-button-sm {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.85rem;
+  }
+}
+p-dialog {
+  border-radius: 1rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+
+  .p-dialog-header {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 1px solid #eee;
+  }
+
+  .p-dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+
+    button.p-button {
+      min-width: 100px;
+    }
+  }
+
+  .p-inputtext {
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    font-size: 1rem;
+
+    &:focus {
+      border-color: #4caf50;
+      box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+    }
+  }
+}
+.card {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+  border-radius: 1rem;
+  padding: 1rem;
+  background-color: #fff;
+}

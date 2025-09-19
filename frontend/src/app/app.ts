@@ -1,12 +1,11 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { PessoasCrudComponent } from './features/pessoas-crud/pessoas-crud';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.html',
-  styleUrl: './app.scss'
+  standalone: true,
+  imports: [CommonModule, PessoasCrudComponent],
+  template: `<app-pessoas-crud></app-pessoas-crud>`,
 })
-export class App {
-  protected readonly title = signal('frontend');
-}
+export class AppComponent {}
